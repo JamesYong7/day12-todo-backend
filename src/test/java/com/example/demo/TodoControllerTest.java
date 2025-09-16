@@ -1,3 +1,5 @@
+package com.example.demo;
+
 import com.example.demo.Entity.Todo;
 import com.example.demo.Repository.TodoRepository;
 import org.junit.jupiter.api.BeforeEach;
