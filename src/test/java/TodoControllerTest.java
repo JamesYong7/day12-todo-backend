@@ -172,4 +172,20 @@ public class TodoControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().is(422));
     }
+
+    @Test
+    void should_return_404_when_update_with_not_exist_id() throws Exception {
+        String json = """
+                {
+                    "text": "Buy Bread",
+                    "done": true
+                }
+                """;
+        MockHttpServletRequestBuilder request = put("/todos/999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(404));
+    }
 }

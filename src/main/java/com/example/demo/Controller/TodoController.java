@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Entity.Todo;
 import com.example.demo.Error.TodoEmptyException;
+import com.example.demo.Error.TodoIdNotFoundException;
 import com.example.demo.Service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,8 @@ public class TodoController {
             return ResponseEntity.ok(updatedTodo);
         } catch (TodoEmptyException e) {
             return ResponseEntity.unprocessableEntity().build();
+        }catch (TodoIdNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
