@@ -200,4 +200,13 @@ public class TodoControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().is(204));
     }
+
+    @Test
+    void should_response_404_when_delete_with_not_exist_id() throws Exception {
+        MockHttpServletRequestBuilder request = delete("/todos/999")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(404));
+    }
 }
