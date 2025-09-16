@@ -91,6 +91,21 @@ public class TodoControllerTest {
     }
 
     @Test
+    void should_response_422_when_create_with_no_text_todo() throws Exception {
+        String json = """
+                {
+                    "done": false
+                }
+                """;
+        MockHttpServletRequestBuilder request = post("/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(422));
+    }
+
+    @Test
     void should_return_todo_with_generated_id_when_create_with_todo_with_id() throws Exception {
         String json = """
                 {
