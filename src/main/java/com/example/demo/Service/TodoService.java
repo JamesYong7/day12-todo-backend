@@ -1,6 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Entity.Todo;
+import com.example.demo.Error.TodoEmptyException;
 import com.example.demo.Repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class TodoService {
     }
 
     public Todo create(Todo todo) {
+        if(todo.getText() == null || todo.getText().isEmpty()) {
+            throw new TodoEmptyException("Todo cannot be null");
+        }
         return todoRepository.save(todo);
     }
 }

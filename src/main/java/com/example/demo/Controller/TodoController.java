@@ -1,11 +1,11 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.Todo;
+import com.example.demo.Error.TodoEmptyException;
 import com.example.demo.Service.TodoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,7 +24,13 @@ public class TodoController {
     }
 
     @PostMapping
-    public Todo create(Todo todo){
-        return todoService.create(todo);
+    public ResponseEntity<Todo> create(@RequestBody Todo todo) {
+        try {
+            Todo newTodo = todoService.create(todo);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
+        } catch (TodoEmptyException e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
+
 }

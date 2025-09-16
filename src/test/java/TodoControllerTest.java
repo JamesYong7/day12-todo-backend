@@ -52,7 +52,7 @@ public class TodoControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].id").exists())
                 .andExpect(jsonPath("$[0].text").value("Buy Milk"))
-                .andExpect(jsonPath("$[0].completed").value(false));
+                .andExpect(jsonPath("$[0].done").value(false));
     }
 
     @Test
@@ -60,12 +60,28 @@ public class TodoControllerTest {
         MockHttpServletRequestBuilder request = post("/todos")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("text", "Buy Milk")
-                .param("completed", "false");
+                .param("done", "false");
 
         mockMvc.perform(request)
-                .andExpect(status().isOk())
+                .andExpect(status().is(201))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.text").value("Buy Milk"))
-                .andExpect(jsonPath("$.completed").value(false));
+                .andExpect(jsonPath("$.done").value(false));
+    }
+
+    @Test
+    void should_response_422_when_create_with_empty_todo() throws Exception {
+        String json = """
+                {
+                    "text": "",
+                    "done": false
+                }
+                """;
+        MockHttpServletRequestBuilder request = post("/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(422));
     }
 }
