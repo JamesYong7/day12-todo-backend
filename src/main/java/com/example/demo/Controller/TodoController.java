@@ -46,4 +46,14 @@ public class TodoController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExactTodo(@PathVariable String id) {
+        try {
+            todoService.deleteExactTodo(id);
+            return ResponseEntity.noContent().build();
+        } catch (TodoIdNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

@@ -188,4 +188,16 @@ public class TodoControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().is(404));
     }
+
+    @Test
+    void should_response_204_when_delete_with_exist_id() throws Exception {
+        Todo todo = new Todo(null, "Buy Milk", false);
+        Todo savedTodo = todoRepository.save(todo);
+
+        MockHttpServletRequestBuilder request = delete("/todos/" + savedTodo.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(204));
+    }
 }

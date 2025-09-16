@@ -36,4 +36,9 @@ public class TodoService {
         existingTodo.setDone(todo.isDone());
         return todoRepository.save(existingTodo);
     }
+
+    public void deleteExactTodo(String id){
+        Todo existingTodo = todoRepository.findById(id).orElseThrow(() -> new TodoIdNotFoundException("Todo not found"));
+        todoRepository.delete(existingTodo);
+    }
 }
