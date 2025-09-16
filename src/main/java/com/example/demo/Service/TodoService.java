@@ -1,8 +1,8 @@
 package com.example.demo.Service;
 
 import com.example.demo.Entity.Todo;
-import com.example.demo.Error.TodoEmptyException;
-import com.example.demo.Error.TodoIdNotFoundException;
+import com.example.demo.Exception.TodoEmptyException;
+import com.example.demo.Exception.TodoIdNotFoundException;
 import com.example.demo.Repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
