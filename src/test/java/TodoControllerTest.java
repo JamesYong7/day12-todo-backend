@@ -10,8 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.not;
@@ -110,5 +109,27 @@ public class TodoControllerTest {
                 .andExpect(jsonPath("$.id").value(not(100)))
                 .andExpect(jsonPath("$.text").value("Buy Milk"))
                 .andExpect(jsonPath("$.done").value(false));
+    }
+
+    @Test
+    void should_update_todo_with_response_200_when_update_with_todo() throws Exception {
+        Todo todo = new Todo(null, "Buy Milk", false);
+        Todo savedTodo = todoRepository.save(todo);
+
+        String json = """
+                {
+                    "text": "Buy Bread",
+                    "done": true
+                }
+                """;
+        MockHttpServletRequestBuilder request = put("/todos/" + savedTodo.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.id").value(savedTodo.getId()))
+                .andExpect(jsonPath("$.text").value("Buy Bread"))
+                .andExpect(jsonPath("$.done").value(true));
     }
 }

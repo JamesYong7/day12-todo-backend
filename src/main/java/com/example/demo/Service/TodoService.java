@@ -25,4 +25,14 @@ public class TodoService {
         }
         return todoRepository.save(todo);
     }
+
+    public Todo update(String id, Todo todo) {
+        if(todo.getText() == null || todo.getText().isEmpty()) {
+            throw new TodoEmptyException("Todo cannot be null");
+        }
+        Todo existingTodo = todoRepository.findById(id).orElseThrow(() -> new RuntimeException("Todo not found"));
+        existingTodo.setText(todo.getText());
+        existingTodo.setDone(todo.isDone());
+        return todoRepository.save(existingTodo);
+    }
 }

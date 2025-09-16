@@ -33,4 +33,14 @@ public class TodoController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Todo> update(@PathVariable String id, @RequestBody Todo todo) {
+        try {
+            Todo updatedTodo = todoService.update(id, todo);
+            return ResponseEntity.ok(updatedTodo);
+        } catch (TodoEmptyException e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
+    }
+
 }
