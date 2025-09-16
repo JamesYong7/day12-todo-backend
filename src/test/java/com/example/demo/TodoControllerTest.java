@@ -226,4 +226,14 @@ public class TodoControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().is(404));
     }
+
+    @Test
+    void should_allow_cors() throws Exception{
+        MockHttpServletRequestBuilder request = options("/todos")
+                .header("Access-Control-Request-Method", "GET", "POST", "PUT", "DELETE")
+                .header("Origin",  "htttp://localhost:3000");
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+    }
 }
