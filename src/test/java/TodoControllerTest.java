@@ -155,4 +155,21 @@ public class TodoControllerTest {
                 .andExpect(jsonPath("$.text").value("Buy Bread"))
                 .andExpect(jsonPath("$.done").value(true));
     }
+
+    @Test
+    void should_response_422_when_update_with_empty_todo() throws Exception {
+        Todo todo = new Todo(null, "Buy Milk", false);
+        Todo savedTodo = todoRepository.save(todo);
+
+        String json = """
+                {
+                }
+                """;
+        MockHttpServletRequestBuilder request = put("/todos/" + savedTodo.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(422));
+    }
 }

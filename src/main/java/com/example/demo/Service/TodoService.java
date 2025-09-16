@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Entity.Todo;
 import com.example.demo.Error.TodoEmptyException;
+import com.example.demo.Error.TodoIdNotFoundException;
 import com.example.demo.Repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class TodoService {
         if(todo.getText() == null || todo.getText().isEmpty()) {
             throw new TodoEmptyException("Todo cannot be null");
         }
-        Todo existingTodo = todoRepository.findById(id).orElseThrow(() -> new RuntimeException("Todo not found"));
+        Todo existingTodo = todoRepository.findById(id).orElseThrow(() -> new TodoIdNotFoundException("Todo not found"));
         existingTodo.setText(todo.getText());
         existingTodo.setDone(todo.isDone());
         return todoRepository.save(existingTodo);
