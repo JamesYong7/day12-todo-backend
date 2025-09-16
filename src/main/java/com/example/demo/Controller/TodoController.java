@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Dto.TodoResponseDto;
 import com.example.demo.Entity.Todo;
 import com.example.demo.Error.TodoEmptyException;
 import com.example.demo.Error.TodoIdNotFoundException;
@@ -7,6 +8,7 @@ import com.example.demo.Service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.Service.Mapper.TodoMapper;
 
 import java.util.List;
 
@@ -14,14 +16,17 @@ import java.util.List;
 @RequestMapping("/todos")
 public class TodoController {
     private final TodoService todoService;
+    private final TodoMapper todoMapper;
 
-    public TodoController(TodoService todoService) {
+    public TodoController(TodoService todoService, TodoMapper todoMapper) {
         this.todoService = todoService;
+        this.todoMapper = todoMapper;
     }
 
     @GetMapping
-    public List<Todo> index(){
-        return todoService.index();
+    public List<TodoResponseDto> index(){
+        List<Todo> todos = todoService.index();
+        return todoMapper.toResponseDtoList(todos);
     }
 
     @PostMapping
