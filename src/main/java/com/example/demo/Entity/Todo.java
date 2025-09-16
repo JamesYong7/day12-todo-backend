@@ -14,14 +14,14 @@ public class Todo {
     public Todo(String id, String buyMilk, boolean b) {
         this.id = id;
         this.text = buyMilk;
-        this.completed = b;
+        this.done = b;
     }
     @Id
     private String id;
     @Column(nullable = false)
     private String text;
     @Column(nullable = false)
-    private boolean completed;
+    private boolean done;
 
     public Todo() {
 
