@@ -132,4 +132,27 @@ public class TodoControllerTest {
                 .andExpect(jsonPath("$.text").value("Buy Bread"))
                 .andExpect(jsonPath("$.done").value(true));
     }
+
+    @Test
+    void should_update_todo_with_response_200_when_update_with_todo_and_different_id_in_request() throws Exception {
+        Todo todo = new Todo(null, "Buy Milk", false);
+        Todo savedTodo = todoRepository.save(todo);
+
+        String json = """
+                {
+                    "id": "1",
+                    "text": "Buy Bread",
+                    "done": true
+                }
+                """;
+        MockHttpServletRequestBuilder request = put("/todos/" + savedTodo.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.id").value(savedTodo.getId()))
+                .andExpect(jsonPath("$.text").value("Buy Bread"))
+                .andExpect(jsonPath("$.done").value(true));
+    }
 }
