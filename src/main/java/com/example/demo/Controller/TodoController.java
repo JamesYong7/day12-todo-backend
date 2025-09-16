@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Dto.TodoRequestDto;
 import com.example.demo.Dto.TodoResponseDto;
 import com.example.demo.Entity.Todo;
 import com.example.demo.Error.TodoEmptyException;
@@ -30,9 +31,9 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<Todo> create(@RequestBody Todo todo) {
+    public ResponseEntity<Todo> create(@RequestBody TodoRequestDto todo) {
         try {
-            Todo newTodo = todoService.create(todo);
+            Todo newTodo = todoService.create(todoMapper.toEntity(todo));
             return ResponseEntity.status(HttpStatus.CREATED).body(newTodo);
         } catch (TodoEmptyException e) {
             return ResponseEntity.unprocessableEntity().build();
@@ -40,9 +41,9 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> update(@PathVariable String id, @RequestBody Todo todo) {
+    public ResponseEntity<Todo> update(@PathVariable String id, @RequestBody TodoRequestDto todo) {
         try {
-            Todo updatedTodo = todoService.update(id, todo);
+            Todo updatedTodo = todoService.update(id, todoMapper.toEntity(todo));
             return ResponseEntity.ok(updatedTodo);
         } catch (TodoEmptyException e) {
             return ResponseEntity.unprocessableEntity().build();

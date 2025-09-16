@@ -1,5 +1,6 @@
 package com.example.demo.Service.Mapper;
 
+import com.example.demo.Dto.TodoRequestDto;
 import com.example.demo.Dto.TodoResponseDto;
 import com.example.demo.Entity.Todo;
 import org.springframework.stereotype.Component;
@@ -19,5 +20,13 @@ public class TodoMapper {
 
     public List<TodoResponseDto> toResponseDtoList(List<Todo> todos) {
         return todos.stream().map(this::toResponseDto).toList();
+    }
+
+    public Todo toEntity(TodoRequestDto dto) {
+        Todo todo = new Todo();
+        todo.setId(dto.getId());
+        todo.setText(dto.getText());
+        todo.setDone(dto.isDone());
+        return todo;
     }
 }
