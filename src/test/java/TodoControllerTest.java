@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.not;
 
 @SpringBootTest(classes = com.example.demo.TodoApplication.class)
 @AutoConfigureMockMvc
@@ -57,10 +58,15 @@ public class TodoControllerTest {
 
     @Test
     void should_response_todo_when_create_with_todo() throws Exception {
+        String json = """
+                {
+                    "text": "Buy Milk",
+                    "done": false
+                }
+                """;
         MockHttpServletRequestBuilder request = post("/todos")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("text", "Buy Milk")
-                .param("done", "false");
+                .content(json);
 
         mockMvc.perform(request)
                 .andExpect(status().is(201))
@@ -83,5 +89,26 @@ public class TodoControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().is(422));
+    }
+
+    @Test
+    void should_return_todo_with_generated_id_when_create_with_todo_with_id() throws Exception {
+        String json = """
+                {
+                    "id": 100,
+                    "text": "Buy Milk",
+                    "done": false
+                }
+                """;
+        MockHttpServletRequestBuilder request = post("/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().is(201))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.id").value(not(100)))
+                .andExpect(jsonPath("$.text").value("Buy Milk"))
+                .andExpect(jsonPath("$.done").value(false));
     }
 }
